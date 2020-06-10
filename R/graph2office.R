@@ -142,7 +142,7 @@ graph2office = function(x = NULL, file = "Rplot", fun = NULL, type = c("PPT","DO
       doc <- read_pptx(path = templ)
     }
     
-    if (! layout %in% officer::layout_summary(doc)$master){
+    if (! master %in% officer::layout_summary(doc)$master){
       warning(paste('given master', master, 'was not found in your ppt and replaced with the default'))
       master = "Office Theme"
     }
