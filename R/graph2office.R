@@ -143,12 +143,16 @@ graph2office = function(x = NULL, file = "Rplot", fun = NULL, type = c("PPT","DO
     }
     
     if (! master %in% officer::layout_summary(doc)$master){
-      warning(paste('given master', master, 'was not found in your ppt and replaced with the default'))
-      master = "Office Theme"
+      warning(paste('given master', master, 'was not found in your ppt'))
+      warning('your ppt has following master')
+      warning(officer::layout_summary(doc)$master)
+      stop()
     }
     if (! layout %in% officer::layout_summary(doc)$layout){
-      warning(paste('given layout', layout, 'was not found in your ppt and replaced with the default'))
-      layout = "Blank"
+      warning(paste('given layout', layout, 'was not found in your ppt'))
+      warning('your ppt has following layout(s)')
+      warning(officer::layout_summary(doc)$layout)
+      stop()
     }
     
     doc = add_slide(doc, layout = layout, master = master)
