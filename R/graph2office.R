@@ -63,7 +63,7 @@ graph2office = function(x = NULL, file = "Rplot", fun = NULL, type = c("PPT","DO
                         paper = "auto", orient = ifelse(type[1]=="PPT","landscape","auto"),
                         margins = c(top=0.5,right=0.5,bottom=0.5,left=0.5), 
                         center = TRUE, offx = 1, offy = 1, upscale = FALSE, 
-                        vector.graphic = TRUE, 
+                        vector.graphic = TRUE, master = "Office Theme", layout = "Blank",
                         ...) {
   
   ### 1. Check and format arguments
@@ -141,7 +141,17 @@ graph2office = function(x = NULL, file = "Rplot", fun = NULL, type = c("PPT","DO
     } else {
       doc <- read_pptx(path = templ)
     }
-    doc = add_slide(doc, layout = "Blank", master = "Office Theme")
+    
+    if (! layout %in% officer::layout_summary(doc)$master){
+      warning(paste('given master', master, 'was not found in your ppt and replaced with the default'))
+      master = "Office Theme"
+    }
+    if (! layout %in% officer::layout_summary(doc)$layout){
+      warning(paste('given layout', layout, 'was not found in your ppt and replaced with the default'))
+      layout = "Blank"
+    }
+    
+    doc = add_slide(doc, layout = layout, master = master)
     pagesize = get.slide.size(doc) 
     pagesize["width"]=pagesize["width"]-(margins["left"]+margins["right"])
     pagesize["height"]=pagesize["height"]-(margins["top"]+margins["bottom"])
